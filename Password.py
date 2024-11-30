@@ -34,7 +34,6 @@ class ModernPasswordManagementTool:
         self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
     def setup_ui_style(self):
-        """Setup the style and theme for the UI."""
         style = ttk.Style()
         style.theme_use("clam")
         style.configure("TLabel", font=("Segoe UI", 12))
@@ -42,7 +41,6 @@ class ModernPasswordManagementTool:
         style.configure("TEntry", font=("Segoe UI", 12))
 
     def add_password_generator_tab(self):
-        """Create the Password Generator tab."""
         frame = ttk.Frame(self.notebook)
         self.notebook.add(frame, text="🔑 Password Generator")
 
@@ -71,7 +69,6 @@ class ModernPasswordManagementTool:
         clear_button.grid(row=len(labels)+3, column=1, pady=10)
 
     def add_compromise_checker_tab(self):
-        """Create the Password Compromise Checker tab."""
         frame = ttk.Frame(self.notebook)
         self.notebook.add(frame, text="🕵️ Compromise Checker")
 
@@ -91,7 +88,6 @@ class ModernPasswordManagementTool:
         self.compromise_result.pack(pady=10)
 
     def add_strength_checker_tab(self):
-        """Create the Password Strength Checker tab."""
         frame = ttk.Frame(self.notebook)
         self.notebook.add(frame, text="💪 Strength Checker")
 
@@ -111,7 +107,6 @@ class ModernPasswordManagementTool:
         self.strength_result.pack(pady=10)
 
     def add_password_log_tab(self):
-        """Create the Password Log tab."""
         frame = ttk.Frame(self.notebook)
         self.notebook.add(frame, text="📋 Password Log")
 
@@ -128,7 +123,6 @@ class ModernPasswordManagementTool:
         ttk.Button(btn_frame, text="Export History", command=self.export_password_history).pack(side=tk.LEFT, padx=5)
 
     def generate_password(self):
-        """Generate a password based on user input."""
         first_name = self.entries["first name"].get()
         last_name = self.entries["last name"].get()
         hobby = self.entries["hobby"].get()
@@ -142,13 +136,11 @@ class ModernPasswordManagementTool:
         self.update_generated_password("Basic Password")
 
     def generate_strong_password(self):
-        """Generate a strong random password."""
         characters = string.ascii_letters + string.digits + string.punctuation
         self.generated_password = ''.join(random.choices(characters, k=16))
         self.update_generated_password("Strong Password")
 
     def update_generated_password(self, method):
-        """Update the generated password on the UI and log it."""
         self.generated_password_label.config(text=self.generated_password)
         self.copy_button.config(state=tk.NORMAL)
 
@@ -158,12 +150,10 @@ class ModernPasswordManagementTool:
         self.history_tree.insert("", "end", values=(timestamp, self.generated_password))
 
     def copy_to_clipboard(self):
-        """Copy the generated password to the clipboard."""
         pyperclip.copy(self.generated_password)
         self.status_var.set("Password copied to clipboard!")
 
     def check_password_compromised(self):
-        """Check if the password is compromised using the Have I Been Pwned API."""
         password = self.compromise_entry.get()
         if not password:
             messagebox.showerror("Error", "Please enter a password.")
@@ -189,7 +179,6 @@ class ModernPasswordManagementTool:
             self.compromise_result.config(text="Network error. Try again later.", foreground="red")
 
     def check_password_strength(self):
-        """Check the strength of a given password."""
         password = self.strength_entry.get()
         if not password:
             messagebox.showerror("Error", "Please enter a password.")
@@ -209,31 +198,26 @@ class ModernPasswordManagementTool:
             self.strength_result.config(text="Weak password.", foreground="red")
 
     def clear_password_generator(self):
-        """Clear all input fields and reset labels in the Password Generator tab."""
         for entry in self.entries.values():
             entry.delete(0, tk.END)
         self.generated_password_label.config(text="")
         self.copy_button.config(state=tk.DISABLED)
 
     def clear_compromise_checker(self):
-        """Clear the password compromise checker fields."""
         self.compromise_entry.delete(0, tk.END)
         self.compromise_result.config(text="")
 
     def clear_strength_checker(self):
-        """Clear the password strength checker fields."""
         self.strength_entry.delete(0, tk.END)
         self.strength_result.config(text="")
 
     def clear_password_history(self):
-        """Clear the password history."""
         self.password_history.clear()
         for item in self.history_tree.get_children():
             self.history_tree.delete(item)
         self.status_var.set("Password history cleared.")
 
     def export_password_history(self):
-        """Export the password history to a file."""
         if not self.password_history:
             messagebox.showinfo("Info", "No password history to export.")
             return
